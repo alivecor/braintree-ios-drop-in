@@ -12,6 +12,9 @@
 #import "BTUIKViewUtil.h"
 #import "BTDropInLocalization_Internal.h"
 
+#import "UIImage+ImageWithColor.h"
+#import "UIColor+Hex.h"
+
 #if __has_include(<Braintree/BraintreeCore.h>) // CocoaPods
 #import <Braintree/BraintreeCard.h>
 #import <Braintree/BraintreeCore.h>
@@ -277,17 +280,20 @@
     self.shouldVaultCardSwitchField.hidden = YES;
     [self.stackView addArrangedSubview:self.shouldVaultCardSwitchField];
     
-    self.submitButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 40)];
+    self.submitButton = [[UIButton alloc] init];
+    [self.submitButton setContentEdgeInsets:UIEdgeInsetsMake(10, 0, 10, 0)];
+    // TODO: (rex) pass from the caller
     [self.submitButton setTitle:@"PAY" forState:UIControlStateNormal];
     [self.submitButton addTarget:self action:@selector(submitButtonTapped) forControlEvents:UIControlEventTouchUpInside];
-    [self.submitButton setBackgroundColor:[UIColor systemGreenColor]];
+    [self.submitButton setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHex:@"2D9F86" alpha:1.0]] forState:UIControlStateNormal];
     [self.submitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    self.submitButton setBackgroundImage:[UIImage imageWithColor] forState:UIControlStateDisabled];
+    [self.submitButton setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHex:@"C5D4D0" alpha:1.0]] forState:UIControlStateDisabled];
     [self.stackView addArrangedSubview:self.submitButton];
 }
 
 - (void)submitButtonTapped {
     NSLog(@"REX:: submitButtonTapped");
+    [self tokenizeCard];
 }
 
 - (void)configurationLoaded:(__unused BTConfiguration *)configuration error:(NSError *)error {
