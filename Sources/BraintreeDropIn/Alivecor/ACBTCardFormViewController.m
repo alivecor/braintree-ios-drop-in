@@ -288,6 +288,7 @@
     [self.submitButton setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHex:@"2D9F86" alpha:1.0]] forState:UIControlStateNormal];
     [self.submitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.submitButton setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHex:@"C5D4D0" alpha:1.0]] forState:UIControlStateDisabled];
+    [self.submitButton setEnabled:NO];
     [self.stackView addArrangedSubview:self.submitButton];
 }
 
@@ -506,25 +507,7 @@
 }
 
 - (void)updateSubmitButton {
-    if (!self.collapsed && [self isFormValid]) {
-        // TODO: enable "Pay" button
-        NSLog(@"REX:: submit button ENABLED");
-        self.submitButton.enabled = YES;
-    } else {
-        // TODO: Disable pay button
-        NSLog(@"REX:: submit button Disabled");
-        self.submitButton.enabled = NO;
-    }
-    
-    /*
-    if (!self.collapsed && [self isFormValid]) {
-        self.navigationItem.rightBarButtonItem.enabled = YES;
-        self.navigationItem.rightBarButtonItem.accessibilityHint = nil;
-    } else {
-        self.navigationItem.rightBarButtonItem.enabled = NO;
-        self.navigationItem.rightBarButtonItem.accessibilityHint = BTDropInLocalizedString(REVIEW_AND_TRY_AGAIN);
-    }
-     */
+    self.submitButton.enabled = !self.collapsed && [self isFormValid];
 }
 
 - (void)advanceFocusFromField:(BTUIKFormField *)currentField {
