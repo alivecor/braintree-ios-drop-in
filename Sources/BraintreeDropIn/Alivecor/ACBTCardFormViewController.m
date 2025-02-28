@@ -27,6 +27,9 @@
 #import <BraintreeUnionPay/BraintreeUnionPay.h>
 #endif
 
+@implementation ACBTCardFormConfiguration
+@end
+
 @interface ACBTCardFormViewController ()
 
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -195,16 +198,43 @@
     self.cardNumberHeader.layoutMargins = UIEdgeInsetsMake(0, [BTUIKAppearance verticalFormSpace], 0, [BTUIKAppearance verticalFormSpace]);
     self.cardNumberHeader.layoutMarginsRelativeArrangement = true;
     
+    UILabel *summaryTitleLabel = [[UILabel alloc] init];
+    summaryTitleLabel.numberOfLines = 0;
+    summaryTitleLabel.textAlignment = NSTextAlignmentCenter;
+    summaryTitleLabel.text = self.formConfiguration.summaryTitle;
+    [BTUIKAppearance styleLabelBoldPrimary:summaryTitleLabel];
+    summaryTitleLabel.hidden = [summaryTitleLabel.text length] == 0;
+    [self.stackView addArrangedSubview:summaryTitleLabel];
+    
+    UILabel *summaryDescriptionLabel = [[UILabel alloc] init];
+    summaryDescriptionLabel.numberOfLines = 0;
+    summaryDescriptionLabel.textAlignment = NSTextAlignmentCenter;
+    summaryDescriptionLabel.text = self.formConfiguration.summaryDescription;
+    [BTUIKAppearance styleLabelPrimary:summaryDescriptionLabel];
+    summaryDescriptionLabel.hidden = [summaryDescriptionLabel.text length] == 0;
+    [self.stackView addArrangedSubview:summaryDescriptionLabel];
+    
+    UILabel *displayAmountLabel = [[UILabel alloc] init];
+    displayAmountLabel.numberOfLines = 0;
+    displayAmountLabel.textAlignment = NSTextAlignmentCenter;
+    displayAmountLabel.text = self.formConfiguration.displayAmount;
+    [BTUIKAppearance styleLabelBoldPrimary:displayAmountLabel];
+    displayAmountLabel.hidden = [displayAmountLabel.text length] == 0;
+    [self.stackView addArrangedSubview:displayAmountLabel];
+    
+    [BTDropInUIUtilities addSpacerToStackView:self.stackView beforeView:summaryTitleLabel size: [BTUIKAppearance verticalFormSpace]];
+    
+    /*
     UILabel *cardNumberHeaderLabel = [[UILabel alloc] init];
     cardNumberHeaderLabel.numberOfLines = 0;
     cardNumberHeaderLabel.textAlignment = NSTextAlignmentCenter;
     cardNumberHeaderLabel.text = BTDropInLocalizedString(ENTER_CARD_DETAILS_HELP_LABEL);
     [BTUIKAppearance styleLargeLabelSecondary:cardNumberHeaderLabel];
     [self.cardNumberHeader addArrangedSubview:cardNumberHeaderLabel];
-    [BTDropInUIUtilities addSpacerToStackView:self.cardNumberHeader beforeView:cardNumberHeaderLabel size: [BTUIKAppearance verticalFormSpace]];
     
+    [BTDropInUIUtilities addSpacerToStackView:self.cardNumberHeader beforeView:cardNumberHeaderLabel size: [BTUIKAppearance verticalFormSpace]];
     [self.stackView addArrangedSubview:self.cardNumberHeader];
-     
+     */
 
     self.formFields = @[self.cardNumberField, self.cardholderNameField, self.expirationDateField, self.securityCodeField, self.postalCodeField, self.mobileCountryCodeField, self.mobilePhoneField];
 
@@ -281,9 +311,9 @@
     [self.stackView addArrangedSubview:self.shouldVaultCardSwitchField];
     
     self.submitButton = [[UIButton alloc] init];
+    NSString *buttonTitle = ([self.formConfiguration.submitButtonTitle length] > 0) ? self.formConfiguration.submitButtonTitle : BTDropInLocalizedString(NEXT_ACTION);
     [self.submitButton setContentEdgeInsets:UIEdgeInsetsMake(10, 0, 10, 0)];
-    // TODO: (rex) pass from the caller
-    [self.submitButton setTitle:@"PAY" forState:UIControlStateNormal];
+    [self.submitButton setTitle:buttonTitle forState:UIControlStateNormal];
     [self.submitButton addTarget:self action:@selector(submitButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.submitButton setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHex:@"2D9F86" alpha:1.0]] forState:UIControlStateNormal];
     [self.submitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -293,7 +323,6 @@
 }
 
 - (void)submitButtonTapped {
-    NSLog(@"REX:: submitButtonTapped");
     [self tokenizeCard];
 }
 
