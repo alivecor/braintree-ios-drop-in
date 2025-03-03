@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) BTUIKCardNumberFormField *cardNumberField;
 
 /// The cardholder name form field
-@property (nonatomic, strong, readonly) BTUIKCardholderNameFormField *cardholderNameField;
+//@property (nonatomic, strong, readonly) BTUIKCardholderNameFormField *cardholderNameField;
 
 /// The expiration date form field.
 @property (nonatomic, strong, readonly) BTUIKExpiryFormField *expirationDateField;
@@ -45,10 +45,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) BTUIKPostalCodeFormField *postalCodeField;
 
 /// The mobile country code form field.
-@property (nonatomic, strong, readonly) BTUIKMobileCountryCodeFormField *mobileCountryCodeField;
+//@property (nonatomic, strong, readonly) BTUIKMobileCountryCodeFormField *mobileCountryCodeField;
 
 /// The mobile phone number field.
-@property (nonatomic, strong, readonly) BTUIKMobileNumberFormField *mobilePhoneField;
+//@property (nonatomic, strong, readonly) BTUIKMobileNumberFormField *mobilePhoneField;
 
 /// If the form is valid, returns a BTCardRequest using the values of the form fields. Otherwise `nil`.
 @property (nonatomic, strong, nullable, readonly) BTCardRequest *cardRequest;
