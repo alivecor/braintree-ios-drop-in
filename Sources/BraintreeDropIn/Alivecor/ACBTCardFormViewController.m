@@ -179,6 +179,7 @@
     self.cardNumberField = [[BTUIKCardNumberFormField alloc] init];
     self.cardNumberField.delegate = self;
     self.cardNumberField.cardNumberDelegate = self;
+    self.cardNumberField.state = BTUIKCardNumberFormFieldStateTitleWithoutValidateButton;
     self.cardholderNameField = [[BTUIKCardholderNameFormField alloc] init];
     self.cardholderNameField.delegate = self;
     self.cardholderNameField.isRequired = (self.dropInRequest.cardholderNameSetting == BTFormFieldRequired);
@@ -335,7 +336,7 @@
             self.unionPayEnabledMerchant = YES;
             [self.cardNumberField setAccessoryViewHidden:NO animated:NO];
         }
-        self.cardNumberField.state = BTUIKCardNumberFormFieldStateValidate;
+//        self.cardNumberField.state = BTUIKCardNumberFormFieldStateValidate;
         [self updateRequiredFields];
     }
 }
@@ -548,7 +549,7 @@
 
 - (void)fetchCardCapabilities {
     [self cardNumberErrorHidden:YES];
-    self.cardNumberField.state = BTUIKCardNumberFormFieldStateLoading;
+//    self.cardNumberField.state = BTUIKCardNumberFormFieldStateLoading;
     
     BTCardClient *unionPayClient = [[BTCardClient alloc] initWithAPIClient:self.apiClient];
 #pragma clang diagnostic push
@@ -557,11 +558,11 @@
 #pragma clang diagnostic pop
         if (error || (!cardCapabilities.isUnionPay && !self.cardNumberField.valid)) {
             [self cardNumberErrorHidden:NO];
-            self.cardNumberField.state = BTUIKCardNumberFormFieldStateValidate;
+//            self.cardNumberField.state = BTUIKCardNumberFormFieldStateValidate;
             return;
         } else if (cardCapabilities.isUnionPay && !cardCapabilities.isSupported) {
             [self cardNumberErrorHidden:NO];
-            self.cardNumberField.state = BTUIKCardNumberFormFieldStateValidate;
+//            self.cardNumberField.state = BTUIKCardNumberFormFieldStateValidate;
             return;
         }
         if (cardCapabilities.isUnionPay) {
@@ -584,7 +585,7 @@
         }
         
         self.securityCodeField.textField.placeholder = self.cardNumberField.cardType.securityCodeName;
-        self.cardNumberField.state = BTUIKCardNumberFormFieldStateDefault;
+//        self.cardNumberField.state = BTUIKCardNumberFormFieldStateDefault;
         self.collapsed = NO;
         [self advanceFocusFromField:self.cardNumberField];
         [self formFieldDidChange:nil];
@@ -796,7 +797,7 @@
     }
 
     if (!self.configuration) {
-        self.cardNumberField.state = BTUIKCardNumberFormFieldStateLoading;
+//        self.cardNumberField.state = BTUIKCardNumberFormFieldStateLoading;
         return;
     }
 
@@ -805,7 +806,7 @@
         return;
     }
 
-    self.cardNumberField.state = BTUIKCardNumberFormFieldStateDefault;
+//    self.cardNumberField.state = BTUIKCardNumberFormFieldStateDefault;
     self.collapsed = NO;
     [self advanceFocusFromField:formField];
 }
@@ -817,7 +818,7 @@
     }
     
     if (!self.collapsed && formField == self.cardNumberField) {
-        self.cardNumberField.state = BTUIKCardNumberFormFieldStateValidate;
+//        self.cardNumberField.state = BTUIKCardNumberFormFieldStateValidate;
         self.collapsed = YES;
         if (self.unionPayEnabledMerchant) {
             self.cardCapabilities = nil;
@@ -829,7 +830,7 @@
     [self updateSubmitButton];
     
     // When focus moves from card number field, display the error state if the value in the field is invalid
-    if (formField == self.cardNumberField && self.cardNumberField.state == BTUIKCardNumberFormFieldStateDefault) {
+    if (formField == self.cardNumberField) {
         [self cardNumberErrorHidden:self.cardNumberField.displayAsValid];
     }
     
