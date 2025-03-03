@@ -63,7 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSArray<NSNumber *> *supportedCardTypes;
 
 /// Resets the state of the form fields
-- (void)resetForm;
+//- (void)resetForm;
 
 @end
 
