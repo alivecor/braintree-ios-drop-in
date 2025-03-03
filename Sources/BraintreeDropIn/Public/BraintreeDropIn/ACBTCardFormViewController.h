@@ -32,9 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// The card number form field.
 @property (nonatomic, strong, readonly) BTUIKCardNumberFormField *cardNumberField;
 
-/// The cardholder name form field
-//@property (nonatomic, strong, readonly) BTUIKCardholderNameFormField *cardholderNameField;
-
 /// The expiration date form field.
 @property (nonatomic, strong, readonly) BTUIKExpiryFormField *expirationDateField;
 
@@ -44,26 +41,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// The postal code form field.
 @property (nonatomic, strong, readonly) BTUIKPostalCodeFormField *postalCodeField;
 
-/// The mobile country code form field.
-//@property (nonatomic, strong, readonly) BTUIKMobileCountryCodeFormField *mobileCountryCodeField;
-
-/// The mobile phone number field.
-//@property (nonatomic, strong, readonly) BTUIKMobileNumberFormField *mobilePhoneField;
-
 /// If the form is valid, returns a BTCardRequest using the values of the form fields. Otherwise `nil`.
 @property (nonatomic, strong, nullable, readonly) BTCardRequest *cardRequest;
 
 /// The BTCardCapabilities used to update the form after checking the card number. Applicable when UnionPay is enabled.
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 @property (nonatomic, strong, nullable, readonly) BTCardCapabilities *cardCapabilities;
-#pragma clang diagnostic pop
 
 /// The card network types supported by this merchant
 @property (nonatomic, copy) NSArray<NSNumber *> *supportedCardTypes;
-
-/// Resets the state of the form fields
-//- (void)resetForm;
 
 @end
 
