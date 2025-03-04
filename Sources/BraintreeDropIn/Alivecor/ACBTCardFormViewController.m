@@ -383,10 +383,12 @@
     self.view.userInteractionEnabled = NO;
     __block UINavigationController *navController = self.navigationController;
 
+    [self showLoadingScreen: YES];
     [cardClient tokenizeCard:cardRequest options:nil completion:^(BTCardNonce * _Nullable tokenizedCard, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.view.userInteractionEnabled = YES;
             
+            [self showLoadingScreen: NO];
             if (error != nil) {
                 NSString *message = BTDropInLocalizedString(REVIEW_AND_TRY_AGAIN);
                 if (error.code == BTCardClientErrorTypeCardAlreadyExists) {

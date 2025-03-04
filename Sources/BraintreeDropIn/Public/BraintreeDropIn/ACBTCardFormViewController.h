@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) ACBTCardFormConfiguration *formConfiguration;
 
-@property (nonatomic, weak) id<ACBTCardFormViewControllerDelegate, BTDropInControllerDelegate> delegate;
+@property (nonatomic, weak) id<ACBTCardFormViewControllerDelegate> delegate;
 
 /// The card number form field.
 @property (nonatomic, strong, readonly) BTUIKCardNumberFormField *cardNumberField;
