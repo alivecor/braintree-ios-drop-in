@@ -26,8 +26,13 @@
     if (self) {
         self.state = BTUIKCardNumberFormFieldStateDefault;
         self.textField.accessibilityLabel = BTDropInLocalizedString(CARD_NUMBER_PLACEHOLDER);
-        self.textField.placeholder = BTDropInLocalizedString(CARD_NUMBER_PLACEHOLDER);
-        self.labelText = @"";
+        if (self.state == BTUIKCardNumberFormFieldStateTitleWithoutValidateButton) {
+            self.labelText = BTDropInLocalizedString(CARD_NUMBER_PLACEHOLDER);
+            self.textField.placeholder = @"";
+        } else {
+            self.labelText = @"";
+            self.textField.placeholder = BTDropInLocalizedString(CARD_NUMBER_PLACEHOLDER);
+        }
         self.textField.keyboardType = UIKeyboardTypeNumberPad;
         
         self.hint = [BTUIKPaymentOptionCardView new];
@@ -136,7 +141,11 @@
     self.textField.text = _number;
     [super textFieldDidBeginEditing:textField];
     self.displayAsValid = self.valid || (!self.isValidLength && self.isPotentiallyValid);
-    self.labelText = @"";
+    if (self.state == BTUIKCardNumberFormFieldStateTitleWithoutValidateButton) {
+        self.labelText = BTDropInLocalizedString(CARD_NUMBER_PLACEHOLDER);
+    } else {
+        self.labelText = @"";
+    }
     [UIView transitionWithView:self
                       duration:0.2
                        options:UIViewAnimationOptionTransitionCrossDissolve
@@ -177,7 +186,11 @@
 }
 
 - (void)resetFormField {
-    self.labelText = @"";
+    if (self.state == BTUIKCardNumberFormFieldStateTitleWithoutValidateButton) {
+        self.labelText = BTDropInLocalizedString(CARD_NUMBER_PLACEHOLDER);
+    } else {
+        self.labelText = @"";
+    }
     self.textField.text = @"";
     [self setAccessoryViewHidden:YES animated:NO];
     [self updateAppearance];
@@ -197,6 +210,10 @@
         self.accessoryView = self.loadingView;
         [self setAccessoryViewHidden:NO animated:YES];
         [self.loadingView startAnimating];
+    } else if (self.state == BTUIKCardNumberFormFieldStateTitleWithoutValidateButton) {
+        [self setAccessoryViewHidden:YES animated:YES];
+        self.labelText = BTDropInLocalizedString(CARD_NUMBER_PLACEHOLDER);
+        self.textField.placeholder = @"";
     } else {
         self.accessoryView = self.validateButton;
         [self setAccessoryViewHidden:NO animated:YES];

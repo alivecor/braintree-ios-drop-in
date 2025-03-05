@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "BraintreeDropIn"
-  s.version          = "9.13.0"
+  s.version          = "9.13.1"
   s.summary          = "Braintree Drop-in SDK: A modern foundation for accepting payments"
   s.description      = <<-DESC
                        Braintree is a full-stack payments platform for developers
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.screenshots      = ["https://github.com/braintree/braintree-ios-drop-in/raw/main/Images/client-sdk-ios-series-light.png", "https://github.com/braintree/braintree-ios-drop-in/raw/main/Images/client-sdk-ios-series-dark.png"]
   s.license          = "MIT"
   s.author           = { "Braintree" => "team-bt-sdk@paypal.com" }
-  s.source           = { :git => "https://github.com/braintree/braintree-ios-drop-in.git", :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/rex-hsu/braintree-ios-drop-in.git" }
 
   s.platform         = :ios, "12.0"
   s.requires_arc     = true
@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
 
   s.source_files  = "Sources/BraintreeDropIn/**/*.{h,m}"
   s.public_header_files = "Sources/BraintreeDropIn/Public/BraintreeDropIn/*.h"
-  s.frameworks = "UIKit"
+  #s.frameworks = "UIKit"
   s.dependency "Braintree/ApplePay", "~> 5.26"
   s.dependency "Braintree/Card", "~> 5.26"
   s.dependency "Braintree/Core", "~> 5.26"
@@ -31,6 +31,7 @@ Pod::Spec.new do |s|
   s.dependency "Braintree/PayPal", "~> 5.26"
   s.dependency "Braintree/ThreeDSecure", "~> 5.26"
   s.dependency "Braintree/Venmo", "~> 5.26"
+  s.dependency "Braintree", "~> 5.26"
   s.resource_bundles = {
     "BraintreeDropIn-Localization" => ["Sources/BraintreeDropIn/Resources/*.lproj"],
     "BraintreeDropIn_PrivacyInfo" => ["Sources/BraintreeDropIn/PrivacyInfo.xcprivacy"]

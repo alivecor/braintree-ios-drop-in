@@ -21,3 +21,4 @@ FOUNDATION_EXPORT const unsigned char BraintreeDropInVersionString[];
 #import <BraintreeDropIn/BTDropInRequest.h>
 #import <BraintreeDropIn/BTDropInUICustomization.h>
 #import <BraintreeDropIn/BTDropInLocalization.h>
+#import <BraintreeDropIn/BTUIKVectorArtView+Utils.h>

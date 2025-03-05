@@ -10,10 +10,12 @@
 /// Default: Allows the input of a number upto 16 digits and does Luhn checks for validity while editing.
 /// Validate: Displays a `Next` button accessory view rather than validating while edting. Set the cardNumberDelegate to receive button press. Card numbers of any length can be entered.
 /// Loading: Displays a loading indicator accessory view
+/// TitleWithoutValidateButton: Displays "Card Number" as the label and hide the `Next` button.
 typedef NS_ENUM(NSInteger, BTUIKCardNumberFormFieldState) {
     BTUIKCardNumberFormFieldStateDefault = 0,
     BTUIKCardNumberFormFieldStateValidate,
     BTUIKCardNumberFormFieldStateLoading,
+    BTUIKCardNumberFormFieldStateTitleWithoutValidateButton,
 };
 
 /// The card type associated with the number currently being entered
