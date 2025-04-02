@@ -10,11 +10,24 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
+
 @class BTCardRequest, BTCardCapabilities, BTPaymentMethodNonce;
 @protocol BTCardFormViewControllerDelegate, BTDropInControllerDelegate;
 
+@interface BTCardFormConfiguration : NSObject
+
+@property (nonatomic, copy) NSString *summaryTitle;
+@property (nonatomic, copy) NSString *summaryDescription;
+@property (nonatomic, copy) NSString *displayAmount;
+@property (nonatomic, copy) NSString *submitButtonTitle;
+
+@end
+
 /// Contains form elements for entering card information.
 @interface BTCardFormViewController : BTDropInBaseViewController <UITextFieldDelegate, BTUIKFormFieldDelegate, BTUIKCardNumberFormFieldDelegate>
+
+@property (nonatomic, strong) BTCardFormConfiguration *formConfiguration;
 
 @property (nonatomic, weak) id<BTCardFormViewControllerDelegate, BTDropInControllerDelegate> delegate;
 

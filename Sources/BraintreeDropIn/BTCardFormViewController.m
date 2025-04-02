@@ -24,6 +24,12 @@
 #import <BraintreeUnionPay/BraintreeUnionPay.h>
 #endif
 
+#import "UIImage+ImageWithColor.h"
+#import "UIColor+Hex.h"
+
+@implementation BTCardFormConfiguration
+@end
+
 @interface BTCardFormViewController ()
 
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -37,6 +43,7 @@
 @property (nonatomic, strong, readwrite) BTUIKMobileCountryCodeFormField *mobileCountryCodeField;
 @property (nonatomic, strong, readwrite) BTUIKMobileNumberFormField *mobilePhoneField;
 @property (nonatomic, strong, readwrite) BTUIKSwitchFormField *shouldVaultCardSwitchField;
+@property (nonatomic, strong) UIButton *submitButton;
 @property (nonatomic, strong) UIStackView *cardNumberErrorView;
 @property (nonatomic, strong) UIStackView *cardNumberHeader;
 @property (nonatomic, strong) UIStackView *enrollmentFooter;
@@ -187,6 +194,32 @@
     self.mobilePhoneField = [[BTUIKMobileNumberFormField alloc] init];
     self.mobilePhoneField.delegate = self;
     
+    UILabel *summaryTitleLabel = [[UILabel alloc] init];
+    summaryTitleLabel.numberOfLines = 0;
+    summaryTitleLabel.textAlignment = NSTextAlignmentCenter;
+    summaryTitleLabel.text = self.formConfiguration.summaryTitle;
+    [BTUIKAppearance styleLabelBoldPrimary:summaryTitleLabel];
+    summaryTitleLabel.hidden = [summaryTitleLabel.text length] == 0;
+    [self.stackView addArrangedSubview:summaryTitleLabel];
+    [BTDropInUIUtilities addSpacerToStackView:self.stackView beforeView:summaryTitleLabel size: [BTUIKAppearance verticalFormSpace]];
+    
+    UILabel *summaryDescriptionLabel = [[UILabel alloc] init];
+    summaryDescriptionLabel.numberOfLines = 0;
+    summaryDescriptionLabel.textAlignment = NSTextAlignmentCenter;
+    summaryDescriptionLabel.text = self.formConfiguration.summaryDescription;
+    [BTUIKAppearance styleLabelPrimary:summaryDescriptionLabel];
+    summaryDescriptionLabel.hidden = [summaryDescriptionLabel.text length] == 0;
+    [self.stackView addArrangedSubview:summaryDescriptionLabel];
+    
+    UILabel *displayAmountLabel = [[UILabel alloc] init];
+    displayAmountLabel.numberOfLines = 0;
+    displayAmountLabel.textAlignment = NSTextAlignmentCenter;
+    displayAmountLabel.text = self.formConfiguration.displayAmount;
+    [BTUIKAppearance styleLabelBoldPrimary:displayAmountLabel];
+    displayAmountLabel.hidden = [displayAmountLabel.text length] == 0;
+    [self.stackView addArrangedSubview:displayAmountLabel];
+    
+    /*
     self.cardNumberHeader = [BTDropInUIUtilities newStackView];
     self.cardNumberHeader.layoutMargins = UIEdgeInsetsMake(0, [BTUIKAppearance verticalFormSpace], 0, [BTUIKAppearance verticalFormSpace]);
     self.cardNumberHeader.layoutMarginsRelativeArrangement = true;
@@ -198,6 +231,7 @@
     [self.cardNumberHeader addArrangedSubview:cardNumberHeaderLabel];
     [BTDropInUIUtilities addSpacerToStackView:self.cardNumberHeader beforeView:cardNumberHeaderLabel size: [BTUIKAppearance verticalFormSpace]];
     [self.stackView addArrangedSubview:self.cardNumberHeader];
+     */
 
     self.formFields = @[self.cardNumberField, self.cardholderNameField, self.expirationDateField, self.securityCodeField, self.postalCodeField, self.mobileCountryCodeField, self.mobilePhoneField];
 
@@ -214,6 +248,7 @@
     self.mobileCountryCodeField.hidden = YES;
     self.mobilePhoneField.hidden = YES;
 
+    /*
     // Privacy Policy label
     UILabel *privacyPolicyLabel = [[UILabel alloc] init];
     privacyPolicyLabel.userInteractionEnabled = YES;
@@ -225,6 +260,7 @@
     [BTUIKAppearance styleLabelLink:privacyPolicyLabel];
 
     [self.stackView addArrangedSubview:privacyPolicyLabel];
+    */
 
     [BTDropInUIUtilities addSpacerToStackView:self.stackView beforeView:self.cardNumberField size: [BTUIKAppearance verticalFormSpace]];
     [BTDropInUIUtilities addSpacerToStackView:self.stackView beforeView:self.cardholderNameField size: [BTUIKAppearance verticalFormSpace]];
@@ -269,6 +305,17 @@
     self.shouldVaultCardSwitchField = [[BTUIKSwitchFormField alloc] initWithTitle:BTDropInLocalizedString(SAVE_CARD_LABEL)];
     self.shouldVaultCardSwitchField.hidden = YES;
     [self.stackView addArrangedSubview:self.shouldVaultCardSwitchField];
+    
+    self.submitButton = [[UIButton alloc] init];
+    NSString *buttonTitle = ([self.formConfiguration.submitButtonTitle length] > 0) ? self.formConfiguration.submitButtonTitle : BTDropInLocalizedString(NEXT_ACTION);
+    [self.submitButton setContentEdgeInsets:UIEdgeInsetsMake(10, 0, 10, 0)];
+    [self.submitButton setTitle:buttonTitle forState:UIControlStateNormal];
+    [self.submitButton addTarget:self action:@selector(tokenizeCard) forControlEvents:UIControlEventTouchUpInside];
+    [self.submitButton setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHex:@"2D9F86" alpha:1.0]] forState:UIControlStateNormal];
+    [self.submitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.submitButton setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHex:@"C5D4D0" alpha:1.0]] forState:UIControlStateDisabled];
+    [self.submitButton setEnabled:NO];
+    [self.stackView addArrangedSubview:self.submitButton];
 }
 
 - (void)configurationLoaded:(__unused BTConfiguration *)configuration error:(NSError *)error {
@@ -482,9 +529,11 @@
     if (!self.collapsed && [self isFormValid]) {
         self.navigationItem.rightBarButtonItem.enabled = YES;
         self.navigationItem.rightBarButtonItem.accessibilityHint = nil;
+        self.submitButton.enabled = YES;
     } else {
         self.navigationItem.rightBarButtonItem.enabled = NO;
         self.navigationItem.rightBarButtonItem.accessibilityHint = BTDropInLocalizedString(REVIEW_AND_TRY_AGAIN);
+        self.submitButton.enabled = NO;
     }
 }
 
@@ -587,9 +636,17 @@
     UIActivityIndicatorView *spinner = [UIActivityIndicatorView new];
     spinner.activityIndicatorViewStyle = [BTUIKAppearance sharedInstance].activityIndicatorViewStyle;
     [spinner startAnimating];
+    [spinner setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.view addSubview:spinner];
+    [NSLayoutConstraint activateConstraints: @[
+        [spinner.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor],
+        [spinner.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
+    ]];
 
+    /*
     UIBarButtonItem *addCardButton = self.navigationItem.rightBarButtonItem;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:spinner];
+     */
     self.view.userInteractionEnabled = NO;
     __block UINavigationController *navController = self.navigationController;
 
@@ -601,7 +658,11 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             self.view.userInteractionEnabled = YES;
 
+            [spinner stopAnimating];
+            [spinner removeFromSuperview];
+            /*
             self.navigationItem.rightBarButtonItem = addCardButton;
+             */
 
             if (error != nil) {
                 NSString *message = BTDropInLocalizedString(REVIEW_AND_TRY_AGAIN);
@@ -821,6 +882,30 @@
 
 - (BOOL)textFieldShouldReturn:(__unused UITextField *)textField {
     return YES;
+}
+
+
+@end
+
+@implementation UIImage (ImageWithColor)
+
++ (UIImage *)imageWithColor:(UIColor *)color
+{
+    return [self imageWithColor:color frame:CGRectMake(0.0f, 0.0f, 1.0f, 1.0f)];
+}
+
++ (UIImage *)imageWithColor:(UIColor *)color frame:(CGRect)rect
+{
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
 }
 
 @end
