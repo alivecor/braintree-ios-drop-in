@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.screenshots      = ["https://github.com/braintree/braintree-ios-drop-in/raw/main/Images/client-sdk-ios-series-light.png", "https://github.com/braintree/braintree-ios-drop-in/raw/main/Images/client-sdk-ios-series-dark.png"]
   s.license          = "MIT"
   s.author           = { "Braintree" => "team-bt-sdk@paypal.com" }
-  s.source           = { :git => "https://github.com/rex-hsu/braintree-ios-drop-in.git" }
+  s.source           = { :git => "git@github.com:alivecor/braintree-ios-drop-in.git" }
 
   s.platform         = :ios, "12.0"
   s.requires_arc     = true
